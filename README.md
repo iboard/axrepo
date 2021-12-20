@@ -29,7 +29,7 @@ Repo.start_repo(:people)
              |> Entity.init()
              |> Repo.store(:people)
 
-{:ok ^bob} = Repo.load(:people, bob.id)
+{:ok, ^bob} = Repo.load(:people, bob.id)
 
 %{ bob | age: bob.age + 1 } |> Repo.store(:people)
 ```
