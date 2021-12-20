@@ -7,7 +7,7 @@ A Repository for the "Altex Mix Projects".
 
 ## Installation
 
-If [available in Hex](https://hex.pm/packages/axrepo), the package can be installed
+[Available in Hex](https://hex.pm/packages/axrepo), the package can be installed
 by adding `axrepo` to your list of dependencies in `mix.exs`:
 
 ```elixir
