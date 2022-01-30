@@ -66,6 +66,17 @@ defmodule Altex.Repo.Server do
     GenServer.call(store, :list)
   end
 
+  @doc """
+  Find an entity where the given field is equal to the
+  example.
+  """
+  def find_by(example, field) do
+    %type{} = example.data
+
+    list(type)
+    |> Enum.find(fn e -> Entity.get(e, field) == Entity.get(example, field) end)
+  end
+
   ### Callbacks ####################################################
 
   @impl true
