@@ -43,4 +43,10 @@ defmodule Altex.Repo do
   Returns a list of all `Altex.Entity`s from the named `store`.
   """
   defdelegate list(store), to: Server
+
+  @doc """
+  Find an entity where the given field is equal to the
+  example.
+  """
+  defdelegate find_by(example, field), to: Server
 end
