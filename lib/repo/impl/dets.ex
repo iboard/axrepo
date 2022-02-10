@@ -9,6 +9,8 @@ defmodule Altex.Repo.Gateway.DETS do
       ...
   """
 
+  @env Mix.env()
+
   @doc ~s"""
   Open or create the table but closes the file Immediately. Just ensure
   the file exists.
@@ -66,7 +68,7 @@ defmodule Altex.Repo.Gateway.DETS do
   end
 
   defp get_path(table) do
-    dir = Path.expand(System.get_env("MIX_ENV") || "test", "./data")
+    dir = Path.expand(System.get_env("MIX_ENV") || @env, "./data")
 
     Path.expand("#{table}.dets", dir)
   end
