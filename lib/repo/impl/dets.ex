@@ -68,7 +68,7 @@ defmodule Altex.Repo.Gateway.DETS do
   end
 
   defp get_path(table) do
-    dir = Path.expand(System.get_env("MIX_ENV") || @env, "./data")
+    dir = Path.expand(System.get_env("MIX_ENV") || "#{@env}", "./data")
 
     Path.expand("#{table}.dets", dir)
   end
