@@ -22,7 +22,7 @@ end
 
 Configure the data path in your `config/<env>.exs`
 
-     config: Altex.Repo, :dets_path, "../wherever/your/data/are"
+     config: :axrepo, :dets_path, "../wherever/your/data/are"
 
 ## Usage
 
