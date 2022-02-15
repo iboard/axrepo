@@ -9,7 +9,7 @@ defmodule Altex.Repo.Gateway.DETS do
       ...
   """
 
-  @data_path Application.get_env(Altex.Repo, :dets_path, "data/dev")
+  @data_path Application.get_env(:axrepo, :dets_path, "data/dev")
 
   @doc ~s"""
   Open or create the table but closes the file Immediately. Just ensure
