@@ -18,6 +18,12 @@ def deps do
 end
 ```
 
+## Configuration
+
+Configure the data path in your `config/<env>.exs`
+
+     config: Altex.Repo, :dets_path, "../wherever/your/data/are"
+
 ## Usage
 
 ```elixir

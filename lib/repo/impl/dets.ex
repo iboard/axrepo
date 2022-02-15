@@ -9,7 +9,7 @@ defmodule Altex.Repo.Gateway.DETS do
       ...
   """
 
-  @env Mix.env()
+  @data_path Application.get_env(Altex.Repo, :dets_path, "data/dev")
 
   @doc ~s"""
   Open or create the table but closes the file Immediately. Just ensure
@@ -68,9 +68,7 @@ defmodule Altex.Repo.Gateway.DETS do
   end
 
   defp get_path(table) do
-    dir = Path.expand(System.get_env("MIX_ENV") || "#{@env}", "./data")
-
-    Path.expand("#{table}.dets", dir)
+    Path.expand("#{table}.dets", @data_path)
   end
 
   defp insert_entity([uuid, entity], index), do: Map.put(index, uuid, entity)
