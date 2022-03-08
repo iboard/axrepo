@@ -77,6 +77,16 @@ defmodule Altex.Repo.Server do
     |> Enum.find(fn e -> Entity.get(e, field) == Entity.get(example, field) end)
   end
 
+  def find_by(type, example, field) do
+    list(type)
+    |> Enum.find(fn e -> Entity.get(e, field) == Entity.get(example, field) end)
+  end
+
+  def drop!(type) do
+    GenServer.call(type, :drop!)
+  end
+
+
   ### Callbacks ####################################################
 
   @impl true

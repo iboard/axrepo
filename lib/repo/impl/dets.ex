@@ -9,16 +9,32 @@ defmodule Altex.Repo.Gateway.DETS do
       ...
   """
 
+  require Logger
+
   @data_path Application.get_env(:axrepo, :dets_path, "data/dev")
 
   @doc ~s"""
   Open or create the table but closes the file Immediately. Just ensure
   the file exists.
   """
-  def open_table(table) do
-    {:ok, ets} = open_file(table)
-    :dets.close(ets)
-    ets
+  def open_table(table, cnt \\ 3)
+
+  def open_table(table, 0) do
+    Logger.error("dets table #{inspect(table)} can't be opened after 3 tries to reset")
+    {:error, {:cant_open_or_reset, table}}
+  end
+
+  def open_table(table, cnt) do
+    with {:ok, ets} <- open_file(table) do
+      :dets.close(ets)
+      ets
+    else
+      {:error, {:not_a_dets_file, path}} ->
+        Logger.warn("Can't open dets file for #{table}, file: #{path}. Try to reset ...")
+        File.cp(path, "#{path}._") 
+        File.rm(path)
+        open_table(table, cnt - 1)
+    end
   end
 
   @doc ~s"""
@@ -56,6 +72,9 @@ defmodule Altex.Repo.Gateway.DETS do
     |> get_path()
     |> File.rm()
 
+    if pid = GenServer.whereis(table) do
+      GenServer.stop(pid, :kill)
+    end
     :ok
   end
 
@@ -64,7 +83,7 @@ defmodule Altex.Repo.Gateway.DETS do
   defp open_file(table) do
     fqp = table |> get_path() |> to_charlist()
 
-    {:ok, _ets} = :dets.open_file(table, [{:file, fqp}])
+    :dets.open_file(table, [{:file, fqp}])
   end
 
   defp get_path(table) do

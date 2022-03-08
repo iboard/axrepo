@@ -49,4 +49,7 @@ defmodule Altex.Repo do
   example.
   """
   defdelegate find_by(example, field), to: Server
+  defdelegate find_by(type, example, field), to: Server
+
+  defdelegate drop!(store), to: Server
 end
