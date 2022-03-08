@@ -22,7 +22,7 @@ defmodule Altex.Repo.Gateway do
   alias Altex.Repo.Gateway
 
   # Inject the Gateway implementation
-  @implementation if Mix.env() == :test, do: Gateway.ETS, else: Gateway.DETS
+  @implementation Application.get_env(:axrepo, :gw_impl, Gateway.ETS )
 
   @doc ~s"""
   Start a singelton GenServer, registered as `:repo_gateway` with an empty

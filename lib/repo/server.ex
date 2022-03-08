@@ -83,7 +83,7 @@ defmodule Altex.Repo.Server do
   end
 
   def drop!(type) do
-    GenServer.call(type, :drop!)
+    GenServer.cast(type, :drop!)
   end
 
 
@@ -119,8 +119,9 @@ defmodule Altex.Repo.Server do
   end
 
   @impl true
-  def handle_call(:drop!, _, store) do
-    {:reply, %{}, store}
+  def handle_cast(:drop!, _store) do
+    Gateway.drop!(process_name(self()))
+    {:noreply, %{}}
   end
 
   # Implementation/Helpers ###################################################

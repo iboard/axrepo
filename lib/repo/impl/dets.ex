@@ -73,7 +73,7 @@ defmodule Altex.Repo.Gateway.DETS do
     |> File.rm()
 
     if pid = GenServer.whereis(table) do
-      GenServer.stop(pid, :kill)
+      GenServer.cast(pid, :drop!)
     end
     :ok
   end
