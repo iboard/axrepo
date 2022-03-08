@@ -15,7 +15,9 @@ defmodule Altex.Repo.Gateway.DETS do
 
   @doc ~s"""
   Open or create the table but closes the file Immediately. Just ensure
-  the file exists.
+    the file exists. If the file is corrupt it will be copied to a backup copy
+    and being deleted. If this fails 3 times we give up and return an error
+    `{:error, {:cant_open_or_reset, table}}`
   """
   def open_table(table, cnt \\ 3)
 
@@ -31,7 +33,7 @@ defmodule Altex.Repo.Gateway.DETS do
     else
       {:error, {:not_a_dets_file, path}} ->
         Logger.warn("Can't open dets file for #{table}, file: #{path}. Try to reset ...")
-        File.cp(path, "#{path}._") 
+        File.cp(path, "#{path}._#{cnt}") 
         File.rm(path)
         open_table(table, cnt - 1)
     end
@@ -39,6 +41,8 @@ defmodule Altex.Repo.Gateway.DETS do
 
   @doc ~s"""
   Load the given `table` and return a list of all `Altex.Entity`s
+    The table will be opened for and being closed after read. All entities read from
+    the ets-table will be wrapped in an `%Entity{}`
   """
   def load_table(table) do
     {:ok, ets} = open_file(table)
@@ -55,7 +59,7 @@ defmodule Altex.Repo.Gateway.DETS do
 
   @doc ~s"""
   Insert the given `entity` with the given `uuid` into `table` and returns
-  the entity.
+    the entity. Opens and closes the table before and after.
   """
   def insert(table, {uuid, entity}) do
     {:ok, ets} = open_file(table)
@@ -65,7 +69,7 @@ defmodule Altex.Repo.Gateway.DETS do
   end
 
   @doc ~s"""
-  Drops the entire file from disk. Mostly used in tests.
+  Drops the entire file from disk. Mostly used for tests.
   """
   def drop!(table) do
     table
